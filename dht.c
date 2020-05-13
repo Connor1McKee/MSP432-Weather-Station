@@ -2,12 +2,16 @@
  * Written by Connor McKee and Michael Georgariou
  * CPE 316 - Spring 2020
  *
- * For use with the DHT11 temperature sensor. */
+ * For use with the DHT11 temperature sensor.
+ * Written with help from UUGear.com, who provided a function for
+ * interfacing the DHT11 sensor with a Raspberry Pi. */
 
 #include "msp.h"
 #include "delay.h"
 #include "dht.h"
 
+/* DHT_init
+ * sets up the DHT11 as simple IO and as an input. */
 void DHT_init() {
     /* when power is supplied to the sensor, do not send any instruction to the
      * sensor in within one second in order to pass the unstable status. */
@@ -20,6 +24,10 @@ void DHT_init() {
     DHT_PORT -> OUT &= ~DHT_PIN;
 }
 
+/* DHT_check_checksum
+ * helper function for DHT_read_data. calculates what the checksum
+ * should be and compares it to dht_data[4], which holds the checksum.
+ * if they are the same, returns TRUE, else, returns FALSE. */
 uint8_t DHT_check_checksum(uint8_t dht_data[], uint8_t j) {
     uint32_t dht_data_added = 0;
     uint8_t i;
@@ -37,6 +45,9 @@ uint8_t DHT_check_checksum(uint8_t dht_data[], uint8_t j) {
     return BAD_DATA;
 }
 
+/* DHT_populate_data_table
+ * helper function for DHT_read_data. populates the dht_data table with data
+ * received from the DHT, and returns the amount of data it populated */
 uint8_t DHT_populate_data_table(uint8_t* dht_data[]) {
     uint8_t last_state = 1;
     uint8_t count = 0;
@@ -77,6 +88,15 @@ uint8_t DHT_populate_data_table(uint8_t* dht_data[]) {
     return j;
 }
 
+
+/* DHT_read_data
+ * returns array of size 5, or NULL on failure.
+ * data will be as follows:
+ * index 0 will hold integral humidity data
+ * index 1 will hold decimal humidity data
+ * index 2 will hold integral temperature data
+ * index 3 will hold decimal temperature data
+ * index 4 will be the checksum (already checked) */
 uint8_t* DHT_read_data() {
     uint8_t dht_data[DHT_DATA_SIZE] = {0, 0, 0, 0, 0};
     uint8_t i;

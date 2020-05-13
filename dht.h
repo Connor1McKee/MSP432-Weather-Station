@@ -22,6 +22,7 @@
 #define MAX_COUNT 255
 
 void DHT_init();
+uint8_t* DHT_read_data();
 
 
 
