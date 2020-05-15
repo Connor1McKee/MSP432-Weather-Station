@@ -22,16 +22,15 @@ void main(void) {
 
 	char key;
 	char current = 0xFF;
-	uint16_t DHT_count = 0;
 
 	set_DCO(FREQ_12_MHZ);
 
 	DHT_init();
 	LCD_init();
 	RD_init();
+	keypad_init();
 
 	LCD_turn_off_cursor();
-	keypad_init();
 
 	/* loop delays 1 ms each loops */
 	while(1) {
@@ -61,11 +60,13 @@ void main(void) {
 
 	    else if (current == '3') {
             LCD_go_to_line(1);
+            LCD_write_string("Rain detected?");
+            LCD_go_to_line(2);
             if(RD_read_digital()) {
-                LCD_write_string("Rain detected!    ");
+                LCD_write_string("Yes! :o");
             }
             else {
-                LCD_write_string("Rain not detected.");
+                LCD_write_string("Nope :)");
             }
 	    }
 
