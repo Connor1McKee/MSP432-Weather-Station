@@ -1,4 +1,5 @@
 .settings/
+.launches/
 Debug/
 targetConfigs/
 .ccsproject
