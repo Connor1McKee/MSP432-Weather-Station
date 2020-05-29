@@ -30,7 +30,22 @@
 #define CALIB_ADDR_WIDTH 24
 #define CALIB_DATA_WIDTH 12
 
-#define MASK_5BIT 0xF8
+/* BMP calibration table indices */
+#define DIG_T1 0
+#define DIG_T2 1
+#define DIG_T3 2
+#define DIG_P1 3
+#define DIG_P2 4
+#define DIG_P3 5
+#define DIG_P4 6
+#define DIG_P5 7
+#define DIG_P6 8
+#define DIG_P7 9
+#define DIG_P8 10
+#define DIG_P9 11
+
+
+/* BMP modes */
 #define ULTRA_LOW_RES 0x27
 #define LOW_RES 0x4B
 
@@ -41,7 +56,8 @@
 int32_t read_from_BMP(uint8_t mode);
 void SPI_init();
 void BMP_init();
-
+uint32_t compensate_pressure(int32_t uncomp_press);
+int32_t compensate_temp(int32_t uncomp_temp);
 
 
 

@@ -9,7 +9,8 @@
 #include "bmp280.h"
 #include "msp.h"
 
-uint16_t calibration_data[CALIB_DATA_WIDTH];
+int8_t calibration_data[CALIB_DATA_WIDTH];
+int32_t t_fine;
 
 
 /* SPI_init
@@ -73,7 +74,7 @@ void BMP_init(){
 
 void fetch_calibration_data(){
     int i;
-    uint16_t calibration_value;
+    int8_t calibration_value;
     uint8_t addr = CALIB_START_ADDR;
 
     /* Populate the calibration table */
@@ -254,9 +255,65 @@ int32_t read_from_BMP(uint8_t mode){
 //int32_t compensate_temp(int32_t uncomp_temp){
 //    int32_t var1, var2, T;
 //
-//    var1 = (uncomp_temp>>3) - ()
+//    var1 = ((uncomp_temp>>3) - ((int32_t)calibration_data[DIG_T1]<<1)) *
+//            ((int32_t) calibration_data[DIG_T2]) >> 11;
+//    var2 = ((((uncomp_temp>>4) - ((int32_t)calibration_data[DIG_T1])) *
+//            ((uncomp_temp>>4) - ((int32_t)calibration_data[DIG_T1]))) >> 12) *
+//                    ((int32_t)calibration_data[DIG_T3]) >> 14;
+//    t_fine = var1 + var2;
+//    T = (t_fine * 5 + 128) >> 8;
+//    //T = (var1 + var2)/5120;
+//    return T;
+//}
+
+int32_t compensate_temp(int32_t uncomp_temp){
+    int32_t var1, var2, T;
+
+    var1 = (((double)uncomp_temp)/16384.0 -
+            ((double)calibration_data[DIG_T1])/1024.0) *
+                    ((double)calibration_data[DIG_T2]);
+    var2 = ((((double)uncomp_temp)/131072.0 -
+                ((double)calibration_data[DIG_T1])/8192.0) *
+                    (((double)uncomp_temp)/131072.0 -
+                            ((double)calibration_data[DIG_T1])/8192.0)) *
+                                    ((double)calibration_data[DIG_T3]);
+    t_fine = ((int32_t)(var1 + var2));
+    T = ((var1 + var2)/5120.0);
+    return T;
+}
+
+
+//uint32_t compensate_pressure(int32_t uncomp_press){
+//    int64_t var1, var2, p;
+//
+//    var1 = ((((double)uncom)))
+//
 //
 //}
+
+uint32_t compensate_pressure(int32_t uncomp_press){
+    int64_t var1, var2, p;
+
+    var1 = ((int64_t) t_fine) -128000;
+    var2 = var1 * var1 * (int64_t)calibration_data[DIG_P6];
+    var2 = var2 + ((var1 * (int64_t)calibration_data[DIG_P5]) << 17);
+    var2 = var2 + (((int64_t)calibration_data[DIG_P4]) << 35);
+    var1 = ((var1 * var1 * (int64_t)calibration_data[DIG_P3]) >> 8) +
+            ((var1 * (int64_t)calibration_data[DIG_P2]) << 12);
+    var1 = (((((int64_t)1) << 47) + var1)) * ((int64_t)calibration_data[DIG_P1]) >> 33;
+
+    if(var1 == 0){
+        return 0;
+    }
+
+    p = 1048576 - uncomp_press;
+    p = (((p << 31) - var2) * 3125) / var1;
+    var1 = (((int64_t)calibration_data[DIG_P9]) * (p >> 13) * (p >> 13)) >> 25;
+    var2 = (((int64_t)calibration_data[DIG_P8]) * p) >> 19;
+    p = ((p + var1 + var2) >> 8) + (((int64_t)calibration_data[DIG_P7]) << 4);
+
+    return (uint32_t) p;
+}
 
 
 

@@ -10,7 +10,8 @@
 #include "delay.h"
 
 void main(void){
-    uint32_t pressure_data, temperature_data;
+    uint32_t pressure_data, temperature_data, comp_pressure;
+    int32_t comp_temperature;
 
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;     // stop watchdog timer
 
@@ -25,6 +26,9 @@ void main(void){
 
         pressure_data = read_from_BMP(PRESSURE_READ);
         temperature_data = read_from_BMP(TEMPERATURE_READ);
+
+        comp_temperature = compensate_temp(temperature_data);
+        comp_pressure = compensate_pressure(pressure_data);
     }
 
 
