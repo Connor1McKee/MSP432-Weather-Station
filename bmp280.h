@@ -1,9 +1,8 @@
-/*
- * bmp280.h
+/* bmp280.h
+ * Written by Connor McKee and Michael Georgariou
+ * CPE 316 - Spring 2020
  *
- *  Created on: May 26, 2020
- *      Author: Connor
- */
+ * For use with the MSP432. */
 #include "msp.h"
 
 #ifndef BMP280_H_

@@ -1,9 +1,8 @@
-/*
- * bmp280.c
+/* bmp280.c
+ * Written by Connor McKee and Michael Georgariou
+ * CPE 316 - Spring 2020
  *
- *  Created on: May 26, 2020
- *      Author: Connor
- */
+ * For use with the MSP432. */
 
 
 #include "bmp280.h"
@@ -283,13 +282,6 @@ int32_t compensate_temp(int32_t uncomp_temp){
 }
 
 
-//uint32_t compensate_pressure(int32_t uncomp_press){
-//    int64_t var1, var2, p;
-//
-//    var1 = ((((double)uncom)))
-//
-//
-//}
 
 uint32_t compensate_pressure(int32_t uncomp_press){
     int64_t var1, var2, p;

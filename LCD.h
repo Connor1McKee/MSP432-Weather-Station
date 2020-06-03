@@ -1,6 +1,8 @@
 /* LCD.h
  * Written by Connor McKee and Michael Georgariou
- * CPE 316 - Spring 2020 */
+ * CPE 316 - Spring 2020
+ *
+ * For use with the MSP432. */
 
 #ifndef LCD_H_
 #define LCD_H_
