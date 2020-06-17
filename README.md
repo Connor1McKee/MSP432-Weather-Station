@@ -4,11 +4,12 @@ A simple weather station for the MSP432.
 ## Behavior Description
 When powered on, the system will display "Waiting for input…". Keys on the keypad can adjust this output to display different sensor data.
 
-The '1' key will display the current humidity, and display it as a percentage on the LCD.
-The '2' key will display the current temperature, and display it in degrees Celsius on the LCD.
-The '3' key will display whether or not rain has been detected on the rain sensor module.
-The '4' key will display current wind speed on the LCD.
-Any other key will reset the device.
+OPTIONS:
+- The '1' key will display the current humidity, and display it as a percentage on the LCD.
+- The '2' key will display the current temperature, and display it in degrees Celsius on the LCD.
+- The '3' key will display whether or not rain has been detected on the rain sensor module.
+- The '4' key will display current wind speed on the LCD.
+- Any other key will reset the device.
 
 This device uses a DHT11 sensor to retrieve its humidity and temperature data. Its accuracy is as follows:
 Humidity: ranges from 20-80%, 5% accuracy
