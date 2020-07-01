@@ -1,6 +1,8 @@
 /* raindrops.h
  * Written by Connor McKee and Michael Georgariou
- * CPE 316 - Spring 2020 */
+ * CPE 316 - Spring 2020
+ *
+ * For use with the MSP432. */
 
 #ifndef RAINDROPS_H_
 #define RAINDROPS_H_
